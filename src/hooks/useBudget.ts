@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { Transaction, Category, Budget } from '@/types/budget';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { getBudgetService } from '@/services/factory';
 
 const DEFAULT_BUDGET_LIMITS: Record<Category, number> = {
   food: 500,
@@ -27,53 +27,20 @@ export const useBudget = () => {
   // Fetch transactions from database
   const fetchTransactions = useCallback(async () => {
     if (!user) return;
-    
-    const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .order('date', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching transactions:', error);
-      toast.error('Failed to load transactions');
-      return;
-    }
-
-    const mappedTransactions: Transaction[] = data.map(t => ({
-      id: t.id,
-      type: t.type as 'income' | 'expense',
-      amount: Number(t.amount),
-      category: t.category as Category,
-      description: t.description || '',
-      date: new Date(t.date),
-    }));
-
-    setTransactions(mappedTransactions);
+    const list = await getBudgetService().getTransactions(user.id);
+    setTransactions(list);
   }, [user]);
 
   // Fetch budgets from database
   const fetchBudgets = useCallback(async () => {
     if (!user) return;
-    
-    const { data, error } = await supabase
-      .from('budgets')
-      .select('*');
-
-    if (error) {
-      console.error('Error fetching budgets:', error);
-      return;
-    }
-
-    // Merge database budgets with defaults
+    const stored = await getBudgetService().getBudgetLimits(user.id);
     const expenseCategories: Category[] = ['food', 'transport', 'entertainment', 'shopping', 'bills', 'health', 'other'];
-    const budgetMap = new Map(data.map(b => [b.category, Number(b.budget_limit)]));
-    
     const mergedBudgets: Budget[] = expenseCategories.map(category => ({
       category,
-      limit: budgetMap.get(category) ?? DEFAULT_BUDGET_LIMITS[category],
+      limit: stored[category] ?? DEFAULT_BUDGET_LIMITS[category],
       spent: 0,
     }));
-
     setBudgets(mergedBudgets);
   }, [user]);
 
@@ -95,77 +62,22 @@ export const useBudget = () => {
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
     if (!user) return;
-
-    const { data, error } = await supabase
-      .from('transactions')
-      .insert({
-        user_id: user.id,
-        type: transaction.type,
-        amount: transaction.amount,
-        category: transaction.category,
-        description: transaction.description,
-        date: transaction.date.toISOString(),
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error adding transaction:', error);
-      toast.error('Failed to add transaction');
-      return;
-    }
-
-    const newTransaction: Transaction = {
-      id: data.id,
-      type: data.type as 'income' | 'expense',
-      amount: Number(data.amount),
-      category: data.category as Category,
-      description: data.description || '',
-      date: new Date(data.date),
-    };
-
+    const newTransaction = await getBudgetService().addTransaction(user.id, transaction);
     setTransactions(prev => [newTransaction, ...prev]);
     toast.success('Transaction added successfully!');
   };
 
   const deleteTransaction = async (id: string) => {
     if (!user) return;
-
-    const { error } = await supabase
-      .from('transactions')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      console.error('Error deleting transaction:', error);
-      toast.error('Failed to delete transaction');
-      return;
-    }
-
+    await getBudgetService().deleteTransaction(user.id, id);
     setTransactions(prev => prev.filter(t => t.id !== id));
     toast.success('Transaction deleted');
   };
 
   const updateBudget = async (category: Category, limit: number) => {
     if (!user) return;
-
-    const { error } = await supabase
-      .from('budgets')
-      .upsert({
-        user_id: user.id,
-        category,
-        budget_limit: limit,
-      }, { onConflict: 'user_id,category' });
-
-    if (error) {
-      console.error('Error updating budget:', error);
-      toast.error('Failed to update budget');
-      return;
-    }
-
-    setBudgets(prev => 
-      prev.map(b => b.category === category ? { ...b, limit } : b)
-    );
+    await getBudgetService().updateBudgetLimit(user.id, category, limit);
+    setBudgets(prev => prev.map(b => b.category === category ? { ...b, limit } : b));
     toast.success('Budget updated');
   };
 
