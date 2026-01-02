@@ -1,4 +1,4 @@
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Transaction } from '@/types/budget';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -33,7 +33,7 @@ export const MonthlyTrend = ({ transactions }: MonthlyTrendProps) => {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 0,
     }).format(value);
   };
@@ -49,14 +49,15 @@ export const MonthlyTrend = ({ transactions }: MonthlyTrendProps) => {
             <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(160, 84%, 39%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(160, 84%, 39%)" stopOpacity={0} />
+                  <stop offset="5%" stopColor="hsl(var(--chart-income))" stopOpacity={0.18} />
+                  <stop offset="95%" stopColor="hsl(var(--chart-income))" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(0, 72%, 51%)" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="hsl(0, 72%, 51%)" stopOpacity={0} />
+                  <stop offset="5%" stopColor="hsl(var(--chart-expense))" stopOpacity={0.18} />
+                  <stop offset="95%" stopColor="hsl(var(--chart-expense))" stopOpacity={0} />
                 </linearGradient>
               </defs>
+              <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" />
               <XAxis 
                 dataKey="month" 
                 axisLine={false}
@@ -90,14 +91,14 @@ export const MonthlyTrend = ({ transactions }: MonthlyTrendProps) => {
               <Area
                 type="monotone"
                 dataKey="income"
-                stroke="hsl(160, 84%, 39%)"
+                stroke="hsl(var(--chart-income))"
                 strokeWidth={2}
                 fill="url(#incomeGradient)"
               />
               <Area
                 type="monotone"
                 dataKey="expenses"
-                stroke="hsl(0, 72%, 51%)"
+                stroke="hsl(var(--chart-expense))"
                 strokeWidth={2}
                 fill="url(#expenseGradient)"
               />

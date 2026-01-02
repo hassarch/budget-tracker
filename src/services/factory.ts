@@ -1,5 +1,6 @@
 import { createLocalAuthService } from './auth/localAuthService';
 import { createRealmAuthService } from './auth/realmAuthService';
+import { createGoogleAuthService } from './auth/googleAuthService';
 import type { AuthService } from './auth/types';
 import { createLocalBudgetService } from './budget/localBudgetService';
 import { createRealmBudgetService } from './budget/realmBudgetService';
@@ -12,7 +13,13 @@ let budgetService: BudgetService | null = null;
 
 export const getAuthService = (): AuthService => {
   if (authService) return authService;
-  authService = provider === 'realm' ? createRealmAuthService() : createLocalAuthService();
+  if (provider === 'realm') {
+    authService = createRealmAuthService();
+  } else if (provider === 'google') {
+    authService = createGoogleAuthService();
+  } else {
+    authService = createLocalAuthService();
+  }
   return authService;
 };
 

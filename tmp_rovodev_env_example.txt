@@ -1,8 +1,0 @@
-# Environment configuration (copy to .env.local or .env)
-# Data provider: 'local' (default) or 'realm'
-VITE_DATA_PROVIDER="local"
-
-# If using Realm (MongoDB Atlas App Services):
-VITE_REALM_APP_ID="your-realm-app-id"
-# Mongo database name configured in your App Services (Data Source name 'mongodb-atlas')
-VITE_MONGO_DB_NAME="your-db-name"

@@ -22,7 +22,7 @@ export const SpendingChart = ({ categorySpending }: SpendingChartProps) => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -60,7 +60,7 @@ export const SpendingChart = ({ categorySpending }: SpendingChartProps) => {
                   dataKey="value"
                 >
                   {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                    <Cell key={`cell-${index}`} fill={entry.color} fillOpacity={0.85} />
                   ))}
                 </Pie>
                 <Tooltip

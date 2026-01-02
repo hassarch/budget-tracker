@@ -18,7 +18,7 @@ export const PredictionCard = ({ predictions, budgets }: PredictionCardProps) =>
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -34,9 +34,8 @@ export const PredictionCard = ({ predictions, budgets }: PredictionCardProps) =>
   return (
     <Card className="glass shadow-card overflow-hidden">
       <CardHeader className="pb-3 relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
         <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-foreground/70" />
           <CardTitle className="text-lg font-display">Expense Predictor</CardTitle>
         </div>
       </CardHeader>

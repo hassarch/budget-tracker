@@ -47,26 +47,48 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background dark">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 animate-fade-in">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl gradient-primary shadow-glow">
-              <Wallet className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-display font-bold text-foreground">BudgetWise</h1>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
+        {/* Hero bar */}
+        <section className="relative mb-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden">
+          {/* Background floaters in hero */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+            {/* Scattered, lighter floaters only on dashboard */}
+            <div className="absolute top-[6%] left-[6%] text-3xl opacity-10 animate-float" style={{ animationDuration: '8s' }}>₹</div>
+            <div className="absolute top-[10%] left-[28%] text-2xl opacity-15 animate-float" style={{ animationDuration: '9s', animationDelay: '0.2s' }}>💸</div>
+            <div className="absolute top-[4%] right-[8%] text-4xl opacity-10 animate-float" style={{ animationDuration: '10s', animationDelay: '0.4s' }}>₹</div>
+
+            <div className="absolute top-[22%] left-[10%] text-2xl opacity-15 animate-float" style={{ animationDuration: '11s', animationDelay: '0.6s' }}>💸</div>
+            <div className="absolute top-[26%] right-[26%] text-3xl opacity-10 animate-float" style={{ animationDuration: '12s', animationDelay: '0.8s' }}>₹</div>
+            <div className="absolute top-[18%] right-[14%] text-2xl opacity-15 animate-float" style={{ animationDuration: '9.5s', animationDelay: '0.5s' }}>💸</div>
+
+            <div className="absolute bottom-[20%] left-[12%] text-3xl opacity-10 animate-float" style={{ animationDuration: '10.5s', animationDelay: '0.9s' }}>₹</div>
+            <div className="absolute bottom-[14%] left-[32%] text-2xl opacity-15 animate-float" style={{ animationDuration: '9s', animationDelay: '1.1s' }}>💸</div>
+            <div className="absolute bottom-[10%] right-[22%] text-4xl opacity-10 animate-float" style={{ animationDuration: '11.5s', animationDelay: '0.7s' }}>₹</div>
+            <div className="absolute bottom-[18%] right-[8%] text-2xl opacity-15 animate-float" style={{ animationDuration: '12.5s', animationDelay: '1.2s' }}>💸</div>
+          </div>
+          <div className="bg-secondary border-b border-border/70 animate-fade-in">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-foreground/5 text-foreground/60">
+                    <Wallet className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h1 className="text-[24px] md:text-[26px] font-display font-semibold tracking-[-0.015em]">Expenso</h1>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <AddTransactionDialog onAdd={addTransaction} />
+                  <Button variant="outline" size="icon" onClick={signOut}>
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <AddTransactionDialog onAdd={addTransaction} />
-            <Button variant="outline" size="icon" onClick={signOut}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-        </header>
+        </section>
 
         {/* Summary Cards */}
         <section className="mb-8">

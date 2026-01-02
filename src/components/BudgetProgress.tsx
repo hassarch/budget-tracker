@@ -11,7 +11,7 @@ export const BudgetProgress = ({ budgets }: BudgetProgressProps) => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -55,12 +55,12 @@ export const BudgetProgress = ({ budgets }: BudgetProgressProps) => {
               <div className="relative">
                 <Progress 
                   value={percentage} 
-                  className={`h-2 ${
+                  className={`h-1.5 bg-muted rounded-full overflow-hidden ${
                     isOverBudget 
-                      ? '[&>div]:bg-destructive' 
+                      ? '[&>div]:bg-destructive/80' 
                       : isNearLimit 
-                        ? '[&>div]:bg-warning' 
-                        : '[&>div]:bg-success'
+                        ? '[&>div]:bg-warning/80' 
+                        : '[&>div]:bg-foreground/40'
                   }`}
                 />
               </div>

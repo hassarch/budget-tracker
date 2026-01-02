@@ -12,7 +12,7 @@ export const SummaryCards = ({ income, expenses, balance, savingsRate }: Summary
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
@@ -47,39 +47,29 @@ export const SummaryCards = ({ income, expenses, balance, savingsRate }: Summary
       trend: savingsRate >= 20 ? 'positive' : savingsRate >= 10 ? 'neutral' : 'negative',
       description: 'Of income saved',
     },
-  ];
+  ] as const;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((card, index) => (
         <Card 
           key={card.title} 
-          className="glass shadow-card animate-slide-up overflow-hidden group hover:shadow-glow transition-all duration-300"
-          style={{ animationDelay: `${index * 100}ms` }}
+          className="glass shadow-card animate-fade-in overflow-hidden transition-all duration-300"
+          style={{ animationDelay: `${index * 80}ms` }}
         >
-          <CardContent className="p-6">
+          <CardContent className="p-5">
             <div className="flex items-start justify-between">
-              <div className="space-y-2">
-                <p className="text-sm font-medium text-muted-foreground">{card.title}</p>
-                <p className={`text-2xl font-display font-bold ${
-                  card.trend === 'positive' ? 'text-success' : 
-                  card.trend === 'negative' ? 'text-destructive' : 
-                  'text-foreground'
+              <div className="space-y-1.5">
+                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">{card.title}</p>
+                <p className={`text-[22px] md:text-[24px] leading-tight font-display font-semibold ${
+                  card.title === 'Income' ? 'text-success' : card.title === 'Expenses' ? 'text-destructive' : 'text-foreground'
                 }`}>
                   {card.value}
                 </p>
                 <p className="text-xs text-muted-foreground">{card.description}</p>
               </div>
-              <div className={`p-3 rounded-xl ${
-                card.trend === 'positive' ? 'bg-success/10' : 
-                card.trend === 'negative' ? 'bg-destructive/10' : 
-                'bg-muted'
-              } group-hover:scale-110 transition-transform duration-300`}>
-                <card.icon className={`w-5 h-5 ${
-                  card.trend === 'positive' ? 'text-success' : 
-                  card.trend === 'negative' ? 'text-destructive' : 
-                  'text-muted-foreground'
-                }`} />
+              <div className="p-2.5 rounded-lg bg-foreground/5 text-foreground/60 transition-colors">
+                <card.icon className="w-5 h-5" />
               </div>
             </div>
           </CardContent>

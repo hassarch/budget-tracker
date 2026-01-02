@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/hooks/useAuth';
+import { GoogleSignInButton } from '@/components/auth/GoogleAuth';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -132,43 +133,44 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <Card className="w-full max-w-md glass-card animate-fade-in">
+    <div className="relative min-h-screen bg-background flex items-center justify-center px-4 overflow-hidden">
+      {/* Background floating cash */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-[6%] left-[6%] text-4xl opacity-50 animate-float" style={{ animationDuration: '6s' }}>💸</div>
+        <div className="absolute top-[14%] left-[20%] text-2xl opacity-40 animate-float" style={{ animationDuration: '12s', animationDelay: '0.2s' }}>₹</div>
+        <div className="absolute top-[10%] right-[8%] text-3xl opacity-50 animate-float" style={{ animationDuration: '12s', animationDelay: '0.5s' }}>₹</div>
+        <div className="absolute top-[22%] right-[24%] text-2xl opacity-30 animate-float" style={{ animationDuration: '13s', animationDelay: '0.7s' }}>💸</div>
+
+        <div className="absolute bottom-[12%] left-[14%] text-5xl opacity-30 animate-float" style={{ animationDuration: '8s', animationDelay: '1s' }}>💸</div>
+        <div className="absolute bottom-[18%] left-[30%] text-3xl opacity-30 animate-float" style={{ animationDuration: '15s', animationDelay: '1.1s' }}>₹</div>
+        <div className="absolute bottom-[8%] right-[10%] text-4xl opacity-40 animate-float" style={{ animationDuration: '6.5s', animationDelay: '0.8s' }}>₹</div>
+        <div className="absolute bottom-[20%] right-[28%] text-2xl opacity-30 animate-float" style={{ animationDuration: '9s', animationDelay: '1.3s' }}>💸</div>
+
+        <div className="absolute top-[35%] left-[42%] text-3xl opacity-40 animate-float" style={{ animationDuration: '13s', animationDelay: '0.3s' }}>💸</div>
+        <div className="absolute top-[48%] left-[12%] text-2xl opacity-30 animate-float" style={{ animationDuration: '9.5s', animationDelay: '1.4s' }}>₹</div>
+        <div className="absolute top-[40%] right-[22%] text-3xl opacity-40 animate-float" style={{ animationDuration: '15s', animationDelay: '0.9s' }}>💸</div>
+        <div className="absolute top-[55%] right-[6%] text-2xl opacity-30 animate-float" style={{ animationDuration: '10s', animationDelay: '1.6s' }}>₹</div>
+      </div>
+
+      <Card className="w-full max-w-md bg-card border shadow-card animate-fade-in relative z-10">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-4 rounded-xl gradient-primary shadow-glow">
-              <Wallet className="h-8 w-8 text-primary-foreground" />
+          <div className="flex justify-center mb-3">
+            <div className="p-2 rounded-lg bg-foreground/5 text-foreground/60">
+              <img src="/expenso-favicon.svg" alt="Expenso" className="h-8 w-8" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-display">
-            {isLogin ? 'Welcome Back' : 'Create Account'}
-          </CardTitle>
-          <CardDescription>
-            {isLogin 
-              ? 'Sign in to access your budget dashboard' 
-              : 'Start tracking your finances today'}
+          <CardTitle className="text-[22px] font-display tracking-[-0.01em]">Expenso</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            {isLogin ? 'Sign in to continue' : 'Create your account'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {/* Google Sign In */}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full mb-4"
-            onClick={handleGoogleSignIn}
-            disabled={isGoogleLoading}
-          >
-            {isGoogleLoading ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-foreground" />
-            ) : (
-              <>
-                <GoogleIcon />
-                <span className="ml-2">Continue with Google</span>
-              </>
-            )}
-          </Button>
+          <div className="mb-4">
+            <GoogleSignInButton />
+          </div>
 
-          <div className="relative my-4">
+          <div className="relative my-2">
             <Separator />
             <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
               or
@@ -225,9 +227,9 @@ const Auth = () => {
               )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" variant="outline" className="w-full" disabled={isLoading}>
               {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground" />
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-foreground" />
               ) : (
                 isLogin ? 'Sign In' : 'Create Account'
               )}
@@ -241,7 +243,7 @@ const Auth = () => {
                 setIsLogin(!isLogin);
                 setErrors({});
               }}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               {isLogin 
                 ? "Don't have an account? Sign up" 

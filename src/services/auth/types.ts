@@ -7,4 +7,5 @@ export interface AuthService {
   signInWithGoogle(): Promise<{ error: Error | null }>;
   signOut(): Promise<void>;
   onAuthStateChange(callback: (user: AuthUser | null) => void): () => void;
+  setUser?(user: AuthUser): void; // Optional method for Google auth
 }

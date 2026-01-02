@@ -69,7 +69,7 @@ export const AddTransactionDialog = ({ onAdd }: AddTransactionDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gradient-primary text-primary-foreground shadow-glow hover:opacity-90 transition-opacity">
+        <Button variant="default">
           <Plus className="h-4 w-4 mr-2" />
           Add Transaction
         </Button>
@@ -135,7 +135,7 @@ export const AddTransactionDialog = ({ onAdd }: AddTransactionDialogProps) => {
             />
           </div>
 
-          <Button type="submit" className="w-full gradient-primary text-primary-foreground">
+          <Button type="submit" className="w-full">
             Add {type === 'income' ? 'Income' : 'Expense'}
           </Button>
         </form>
