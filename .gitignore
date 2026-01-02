@@ -1,6 +1,7 @@
 # Node modules
 node_modules/
 
+VERCEL_DEPLOYMENT.md
 # Environment variables
 .env
 .env.local
